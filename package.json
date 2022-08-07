@@ -4,6 +4,7 @@
   "displayName": "ME.ECS Addon DataConfig Generator",
   "description": "ME.ECS Addon DataConfig Generator Package.",
   "unity": "2020.3",
+  "documentationUrl": "https://github.com/chromealex/me.ecs-dataconfiggenerator/blob/master/README.md",
   "dependencies": {
     "com.unity.collections": "1.0.0-pre.6",
     "com.unity.ui": "1.0.0-preview.18",
