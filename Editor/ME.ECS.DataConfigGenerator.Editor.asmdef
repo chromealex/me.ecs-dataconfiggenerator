@@ -6,7 +6,8 @@
         "ME.ECS.Editor",
         "ME.ECS.DataConfigGenerator",
         "Unity.Localization",
-        "ME.ECS.FPMath"
+        "ME.ECS.FPMath",
+        "ME.ECS.Addons.DataConfigs"
     ],
     "includePlatforms": [
         "Editor"
