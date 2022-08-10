@@ -1,7 +1,14 @@
+#if FIXED_POINT_MATH
 using ME.ECS.Mathematics;
+using tfloat = sfloat;
+#else
+using Unity.Mathematics;
+using tfloat = System.Single;
+#endif
 
 namespace ME.ECS.DataConfigGenerator.DataParsers {
 
+    #if FIXED_POINT_MATH
     public struct Fp4Parser : IParser, IDefaultParser {
 
         public bool IsValid(System.Type fieldType) {
@@ -80,5 +87,6 @@ namespace ME.ECS.DataConfigGenerator.DataParsers {
         }
 
     }
+    #endif
     
 }
