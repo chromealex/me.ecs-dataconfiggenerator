@@ -179,7 +179,11 @@ namespace ME.ECS.DataConfigGenerator {
                 this.logsResult.Clear();
                 foreach (var item in DataConfigGeneratorSettingsEditor.logs) {
 
-                    if (item.logType == LogItem.LogItemType.System) {
+                    if (item.logType == LogItem.LogItemType.SystemInfo) {
+                     
+                        this.logsResult.Append($"<color=#7cc>{item.text}</color>");
+   
+                    } else if (item.logType == LogItem.LogItemType.System) {
                      
                         this.logsResult.Append($"<color=#77c>{item.text}</color>");
    
@@ -428,21 +432,39 @@ namespace ME.ECS.DataConfigGenerator {
                 
             }
 
-            foreach (var generator in list) {
+            //this.isDoneGenerator = false;
+            //System.Threading.ThreadPool.QueueUserWorkItem((s) => {
+            {
 
-                generator.ClearLogs();
-                generator.UpdateConfigs();
+                foreach (var generator in list) {
 
-                var logs = generator.GetLogs();
-                DataConfigGeneratorSettingsEditor.logs.AddRange(logs);
+                    generator.ClearLogs();
+                    generator.UpdateConfigs();
+
+                    var logs = generator.GetLogs();
+                    DataConfigGeneratorSettingsEditor.logs.AddRange(logs);
+
+                }
+
+                //this.isDoneGenerator = true;
 
             }
-            
+            //});
+            //EditorCoroutines.StartCoroutine(this.WaitForGenerator());
+
             DataConfigGeneratorSettingsEditor.logs.Add(LogItem.LogSystem($"Linking complete"));
 
             UnityEditor.AssetDatabase.SaveAssets();
             this.inProgress = false;
 
+        }
+
+        private bool isDoneGenerator;
+        private IEnumerator WaitForGenerator() {
+
+            while (this.isDoneGenerator == false) yield return null;
+            yield return null;
+            
         }
 
     }

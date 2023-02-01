@@ -24,6 +24,7 @@ namespace ME.ECS.DataConfigGenerator {
             Warning,
             Error,
             System,
+            SystemInfo,
 
         }
         
@@ -61,6 +62,15 @@ namespace ME.ECS.DataConfigGenerator {
             
             return new LogItem() {
                 logType = LogItemType.System,
+                text = text,
+            };
+            
+        }
+
+        public static LogItem LogSystemInfo(string text) {
+            
+            return new LogItem() {
+                logType = LogItemType.SystemInfo,
                 text = text,
             };
             
@@ -154,15 +164,19 @@ namespace ME.ECS.DataConfigGenerator {
 
             }
 
-            var result = this.generator.TryToConvert(dataStr, componentType, field.Name, field.FieldType, out var val);
-            if (result == false) {
+            try {
+                var result = this.generator.TryToConvert(dataStr, componentType, field.Name, field.FieldType, out var val);
+                if (result == false) {
 
-                this.generator.LogError($"Data `{dataStr}` couldn't been parsed because parser was not found for type `{field.FieldType}`. If you need to store custom struct type - use JSON format.");
+                    this.generator.LogError($"Data `{dataStr}` couldn't been parsed because parser was not found for type `{field.FieldType}`. If you need to store custom struct type - use JSON format.");
 
-            } else {
+                } else {
 
-                field.SetValue(instance, val);
+                    field.SetValue(instance, val);
 
+                }
+            } catch (System.Exception ex) {
+                this.generator.LogError(ex.Message);
             }
 
         }
@@ -223,14 +237,14 @@ namespace ME.ECS.DataConfigGenerator {
 
                 this.version = version;
                 if (currentVersion >= 0) {
-                    this.Log($"Update version: {currentVersion} => {version}");
+                    this.LogSystemInfo($"Update version: {currentVersion} => {version}");
                 } else {
-                    this.Log($"Update version to {version}");
+                    this.LogSystemInfo($"Update version to {version}");
                 }
 
             } else {
 
-                this.Log($"Sheet is up to date (version: {currentVersion}).");
+                this.LogSystemInfo($"Sheet is up to date (version: {currentVersion}).");
                 this.status = Status.UpToDate;
                 return;
 
@@ -363,9 +377,11 @@ namespace ME.ECS.DataConfigGenerator {
 
                     // Update new config
                     var config = kv.Value;
-                    this.Log($"Updating config `{config.name}`");
+                    this.LogSystemInfo("==========================");
+                    this.LogSystemInfo($"Updating config `{config.name}`");
                     this.UpdateConfig(kv.Key, kv.Value);
-                    this.Log($"Updated config `{config.name}`");
+                    this.LogSystemInfo($"Updated config `{config.name}`");
+                    this.LogSystemInfo("==========================");
 
                 }
 
@@ -379,10 +395,11 @@ namespace ME.ECS.DataConfigGenerator {
                 if (this.visitedFiles.Contains(fileFix) == false) {
                     
                     // Delete config
-                    //UnityEngine.Debug.LogWarning($"DO: Delete file {file}");
-                    this.Log($"Deleting config `{fileFix}`");
+                    this.LogSystemInfo("==========================");
+                    this.LogSystemInfo($"Deleting config `{fileFix}`");
                     this.DeleteConfig(fileFix);
-                    this.Log($"Deleted config `{fileFix}`");
+                    this.LogSystemInfo($"Deleted config `{fileFix}`");
+                    this.LogSystemInfo("==========================");
                     
                 }
 
@@ -407,10 +424,11 @@ namespace ME.ECS.DataConfigGenerator {
                     if (config.name.EndsWith(System.IO.Path.GetFileNameWithoutExtension(fileFix)) == true) {
                         
                         // Update config
-                        //UnityEngine.Debug.LogWarning($"DO: Update config {config.name}");
-                        this.Log($"Updating config `{config.name}`");
+                        this.LogSystemInfo("==========================");
+                        this.LogSystemInfo($"Updating config `{config.name}`");
                         this.UpdateConfig(fileFix, config);
-                        this.Log($"Updated config `{config.name}`");
+                        this.LogSystemInfo($"Updated config `{config.name}`");
+                        this.LogSystemInfo("==========================");
                         
                         visitedFiles.Add(fileFix);
                         visitedConfigs.Add(config);
@@ -428,10 +446,11 @@ namespace ME.ECS.DataConfigGenerator {
                 if (visitedConfigs.Contains(config) == false) {
                     
                     // Create config
-                    //UnityEngine.Debug.LogWarning($"DO: Create config {config.name}");
-                    this.Log($"Creating config `{config.name}`");
+                    this.LogSystemInfo("==========================");
+                    this.LogSystemInfo($"Creating config `{config.name}`");
                     var path = this.CreateConfig(config);
-                    this.Log($"Created config `{config.name}`");
+                    this.LogSystemInfo($"Created config `{config.name}`");
+                    this.LogSystemInfo("==========================");
                     created.Add(path, config);
                     
                     visitedFiles.Add(path);
@@ -627,8 +646,13 @@ namespace ME.ECS.DataConfigGenerator {
 
             if (data.StartsWith("{") == true || data.StartsWith("[") == true) {
 
-                // Custom json-struct
-                result = JSONParser.FromJson(data, fieldType);
+                try {
+                    // Custom json-struct
+                    result = JSONParser.FromJson(data, fieldType);
+                } catch (System.Exception ex) {
+                    this.LogError(ex.Message);
+                }
+
                 return true;
 
             }
@@ -815,6 +839,18 @@ namespace ME.ECS.DataConfigGenerator {
         public void LogWarning(string text) {
             
             this.logs.Add(LogItem.LogWarning(text));
+            
+        }
+
+        public void LogSystemInfo(string text) {
+            
+            this.LogElement(LogItem.LogSystemInfo(text));
+            
+        }
+
+        public void LogElement(LogItem item) {
+            
+            this.logs.Add(item);
             
         }
 

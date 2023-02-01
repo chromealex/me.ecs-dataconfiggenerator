@@ -154,15 +154,15 @@ namespace ME.ECS.DataConfigGenerator {
 
                     if (parser.IsValid(type) == true) {
 
-                        try {
-                            if (parser.Parse(resJson, type, out var result) == true) {
-                                return result;
-                            }
-
-                            //if (parser.Parse(data, componentType, fieldName, fieldType, out result) == true) return true;
-                        } catch (System.Exception ex) {
-                            UnityEngine.Debug.LogError($"Parser `{parser}` failed with exception: {ex.Message}");
+                        //try {
+                        if (parser.Parse(resJson, type, out var result) == true) {
+                            return result;
                         }
+
+                        //if (parser.Parse(data, componentType, fieldName, fieldType, out result) == true) return true;
+                        //} catch (System.Exception ex) {
+                        //    UnityEngine.Debug.LogError($"Parser `{parser}` failed with exception: {ex.Message}");
+                        //}
 
                     }
 
