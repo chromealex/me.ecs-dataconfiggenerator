@@ -664,7 +664,10 @@ namespace ME.ECS.DataConfigGenerator {
                 }
 
                 var instance = this.behaviour.CreateComponentInstance(config, componentInfo, allValuesAreNull);
-                if (instance == null) continue;
+                if (instance == null) {
+                    this.LogError($"Component with name `{componentInfo.name}` not found.");
+                    continue;
+                }
                 
                 if (isTag == false) {
 
@@ -680,7 +683,8 @@ namespace ME.ECS.DataConfigGenerator {
                 if (instance is IComponentBase) {
 
                     if (allValuesAreNull == true) {
-
+                        
+                        this.Log($"Remove component with name `{componentInfo.name}` because of all fields are null.");
                         var list = config.structComponents.ToList();
                         list.RemoveAt(i);
                         config.structComponents = list.ToArray();
