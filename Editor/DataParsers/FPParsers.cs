@@ -8,7 +8,6 @@ using tfloat = System.Single;
 
 namespace ME.ECS.DataConfigGenerator.DataParsers {
 
-    #if FIXED_POINT_MATH
     public struct Fp4Parser : IParser, IDefaultParser {
 
         public bool IsValid(System.Type fieldType) {
@@ -72,6 +71,7 @@ namespace ME.ECS.DataConfigGenerator.DataParsers {
 
     }
     
+    #if FIXED_POINT_MATH
     public struct FpParser : IParser, IDefaultParser {
 
         public bool IsValid(System.Type fieldType) {

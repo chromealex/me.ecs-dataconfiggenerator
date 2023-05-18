@@ -49,6 +49,14 @@ namespace ME.ECS.DataConfigGenerator {
         public string[] templates;
         public Dictionary<ComponentInfo, List<string>> data;
 
+        public string GetFileName() {
+            var splitted = this.name.Split('/');
+            if (splitted.Length > 1) {
+                return splitted[splitted.Length - 1];
+            }
+            return this.name;
+        }
+
         public bool Equals(ConfigInfo other) {
 
             return other.name == this.name;

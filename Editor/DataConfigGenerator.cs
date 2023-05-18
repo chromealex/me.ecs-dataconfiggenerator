@@ -665,7 +665,7 @@ namespace ME.ECS.DataConfigGenerator {
         public void UpdateConfig(string path, ConfigInfo configInfo) {
 
             var config = UnityEditor.AssetDatabase.LoadAssetAtPath<ME.ECS.DataConfigs.DataConfig>(path);
-            config.name = configInfo.name;
+            config.name = configInfo.GetFileName();
             config.structComponents = new IComponentBase[configInfo.data.Count];
             
             var i = 0;
@@ -790,7 +790,7 @@ namespace ME.ECS.DataConfigGenerator {
         public string CreateConfig(ConfigInfo configInfo) {
 
             var config = this.behaviour.CreateConfigInstance(configInfo);
-            config.name = configInfo.name;
+            config.name = configInfo.GetFileName();
             var path = $"{this.configsDirectory}/{config.name}.asset";
             var dir = System.IO.Path.GetDirectoryName(path);
             if (System.IO.Directory.Exists(dir) == false) System.IO.Directory.CreateDirectory(dir);

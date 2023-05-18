@@ -1,6 +1,6 @@
 {
   "name": "com.me.ecs.addons.dataconfiggenerator",
-  "version": "1.0.13",
+  "version": "1.0.18",
   "displayName": "ME.ECS Addon DataConfig Generator",
   "description": "ME.ECS Addon DataConfig Generator Package.",
   "unity": "2020.3",
