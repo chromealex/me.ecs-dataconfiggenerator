@@ -791,7 +791,7 @@ namespace ME.ECS.DataConfigGenerator {
 
             var config = this.behaviour.CreateConfigInstance(configInfo);
             config.name = configInfo.GetFileName();
-            var path = $"{this.configsDirectory}/{config.name}.asset";
+            var path = $"{this.configsDirectory}/{configInfo.name}.asset";
             var dir = System.IO.Path.GetDirectoryName(path);
             if (System.IO.Directory.Exists(dir) == false) System.IO.Directory.CreateDirectory(dir);
             UnityEditor.AssetDatabase.CreateAsset(config, path);
