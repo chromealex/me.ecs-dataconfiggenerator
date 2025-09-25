@@ -473,7 +473,10 @@ namespace ME.ECS.DataConfigGenerator {
 
                 var type = asm.GetTypes()
                                .Where(x => typeof(IComponentBase).IsAssignableFrom(x))
-                               .Where(x => x.FullName.EndsWith(info.name)).OrderByDescending(x => x.Name).FirstOrDefault();
+                               .Where(x => {
+                                   var nameSplitInfo = info.name.Split(".");
+                                   return x.FullName.EndsWith(info.name) && (x.Name == nameSplitInfo[nameSplitInfo.Length - 1]);
+                               }).OrderByDescending(x => x.Name).FirstOrDefault();
                 if (type != null) return type;
 
             }
